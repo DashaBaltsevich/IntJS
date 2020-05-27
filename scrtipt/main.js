@@ -1,5 +1,6 @@
 'use strict';
 const IMG_URL = 'https://image.tmdb.org/t/p/w185_and_h278_bestv2';
+const API_KEY = '03be064787403e19c7e3d6ff256dba09';
 
 const leftMenu = document.querySelector('.left-menu'),
     hamburger = document.querySelector('.hamburger'),
@@ -7,31 +8,31 @@ const leftMenu = document.querySelector('.left-menu'),
 
 
     class DBService {
-        getData = async (url) => {
+        async getData(url) {
             const res = await fetch(url);
             if (res.ok) {
                 return res.json();
             } else {
                 throw new Error(`Не удалось получить данные 
-                по адресу ${url}`)
+                по адресу ${url}`);
             }
         }
     
-        getTestData = asynс () => {
-            return await this.getData('test.json')
+        getTestData () {
+            return this.getData('test.json');
         }
-    };
+    }
     
     const renderCard = response => {
         response.results.forEach((e) => {
             const {
                 backdrop_path: backdrop,
-                 name: title,
-                 poster_path: poster,
-                 vote_average: vote} = item;
+                name: title,
+                poster_path: poster,
+                vote_average: vote} = e;
 
-            const posterIMG = poster ? IMG_URL + poster: 'img/no-poster';
-            const backdropIMG = backdrop ? IMG_URL + backdrop: 'img/no-poster';
+            const posterIMG = poster ? IMG_URL + poster: 'img/no-poster.jpg';
+            const backdropIMG = backdrop ? IMG_URL + backdrop: 'img/no-poster.jpg';
             const voteElem = '';
 
             const card = document.createElement('li');
@@ -46,6 +47,11 @@ const leftMenu = document.querySelector('.left-menu'),
             <h4 class="tv-card__head">${title}</h4>
         </a>
         `;
+                if(vote === 0) {
+                    card.querySelector('span.tv-card__vote').remove();
+                }
+
+            
             tvShowsList.append(card);
 
             console.log(card);
